@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PcCalc</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div class="body-wrapper">
+      <div class="calulator">
+        <div class="screen" id="screen">
+          <span id="upper-display"></span>
+          <span id="screen-display">0</span>
+        </div>
+        <div class="buttons" id="buttons">
+          <button><span>%</span></button>
+          <button><span>CE</span></button>
+          <button onclick="clearScreen()"><span>C</span></button>
+          <button><span>DEL</span></button>
+          <button><span>1/x</span></button>
+          <button>
+            <span>x<sup>2</sup></span>
+          </button>
+          <button><span>2sqr</span></button>
+          <button value="/" onclick="mathOperator(this)">
+            <span>/</span>
+          </button>
+          <button value="7" onclick="selectedBtn(this)"><span>7</span></button>
+          <button value="8" onclick="selectedBtn(this)"><span>8</span></button>
+          <button value="9" onclick="selectedBtn(this)"><span>9</span></button>
+          <button value="*" onclick="mathOperator(this)">
+            <span>*</span>
+          </button>
+          <button value="4" onclick="selectedBtn(this)"><span>4</span></button>
+          <button value="5" onclick="selectedBtn(this)"><span>5</span></button>
+          <button value="6" onclick="selectedBtn(this)"><span>6</span></button>
+          <button value="-" onclick="mathOperator(this)">
+            <span>-</span>
+          </button>
+          <button value="1" onclick="selectedBtn(this)"><span>1</span></button>
+          <button value="2" onclick="selectedBtn(this)"><span>2</span></button>
+          <button value="3" onclick="selectedBtn(this)"><span>3</span></button>
+          <button value="+" onclick="mathOperator(this)">
+            <span>+</span>
+          </button>
+          <button><span>+/-</span></button>
+          <button value="0" onclick="selectedBtn(this)"><span>0</span></button>
+          <button onclick="selectedBtn(this)"><span>.</span></button>
+          <button value="=" onclick="solveMath()" class="pinkish">
+            <span>=</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
