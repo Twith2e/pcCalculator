@@ -11,7 +11,7 @@ body {
 }
 
 .body-wrapper {
-  background-color: rgb(40, 40, 40);
+  background-color: rgb(50, 50, 50);
   height: fit-content;
   margin: 100px auto;
   padding: 30px 20px 5px 20px;
@@ -38,7 +38,8 @@ body {
 }
 
 #upper-display {
-  font-size: 14px;
+  color: rgb(150, 150, 150);
+  font-size: 15px;
   position: absolute;
   top: -10px;
 }
@@ -57,7 +58,7 @@ button {
   color: white;
   cursor: pointer;
   font-size: 20px;
-  padding: 30px 8px;
+  padding: 25px 8px;
 }
 
 button:hover {
