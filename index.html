@@ -66,13 +66,40 @@
           <button id="num" value="0" onclick="selectedBtn(this);">
             <span>0</span>
           </button>
-          <button id="num" onclick="selectedBtn(this);">
+          <button id="num" value="." onclick="selectedBtn(this);">
             <span>.</span>
           </button>
           <button value="=" onclick="solveMath()" class="pinkish">
             <span>=</span>
           </button>
         </div>
+      </div>
+      <div class="history">
+        <nav>
+          <div class="wrapper">
+            <div class="history-div">
+              <span>History</span>
+              <div class="empty-div" id="historyEmpty"></div>
+            </div>
+          </div>
+          <div class="wrapper">
+            <div class="memory-div">
+              <span>Memory</span>
+              <div class="empty-div" id="memoryEmpty"></div>
+            </div>
+          </div>
+        </nav>
+        <div id="historyList" style="margin-top: 20px">
+          <span id="historyDefaultText" style="padding-left: 30px; color: white"
+            >There's no history yet.</span
+          >
+        </div>
+        <div id="memoryList" style="margin-top: 20px">
+          <span id="memoryDefaultText" style="padding-left: 30px; color: white"
+            >There's nothing saved in memory.</span
+          >
+        </div>
+        <button id="deleteList" onclick="deleteHistory()">delete</button>
       </div>
     </div>
     <script src="script.js"></script>

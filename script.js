@@ -1,15 +1,18 @@
 let screenDisplay = document.getElementById("screen-display");
 let upperScreenDisplay = document.getElementById("upper-display");
+let calcHistory = [];
 let doneCalc = false;
 let calcFirst = false;
 let reset = false;
 let repition = 0;
 let firstTime = true;
+let specialFuncs = false;
 
 function selectedBtn(button) {
-  if (doneCalc === true) {
-    doneCalc = false;
-    upperScreenDisplay.innerText = "";
+  specialFuncs = false;
+  if (button.value === ".") {
+    screenDisplay.innerText += ".";
+    return;
   }
   repition = 0;
   let inputArray = [];
@@ -20,7 +23,6 @@ function selectedBtn(button) {
       case screenDisplay.innerText === "0" || reset === true:
         reset = false;
         screenDisplay.innerText = +inputArray[i];
-
         break;
       default:
         screenDisplay.innerText += +inputArray[i];
@@ -30,7 +32,7 @@ function selectedBtn(button) {
 
 function mathOperator(button) {
   reset = true;
-  if (calcFirst === false && doneCalc === false) {
+  if (calcFirst === false) {
     calcFirst = true;
     if (
       button.value === "/" ||
@@ -53,7 +55,6 @@ function mathOperator(button) {
         let sum = +splitted[0] + +screenDisplay.innerText;
         screenDisplay.innerText = sum;
         upperScreenDisplay.innerText = `${sum} ${button.value}`;
-        console.log(+splitted[0] + +splitted[0]);
         repition = 1;
       }
     } else if (
@@ -105,8 +106,19 @@ function solveMath() {
   let operator = "";
   let values = [];
 
-  upperScreenDisplay.innerText += ` ${screenDisplay.innerText}`;
-  let parts = upperScreenDisplay.innerText.split(/([\/\+\-\*])/);
+  if (specialFuncs === true) {
+    upperScreenDisplay.innerText = screenDisplay.innerText + "=";
+    return;
+  }
+
+  if (upperScreenDisplay.innerText.startsWith("-")) {
+    upperScreenDisplay.innerText += ` ${screenDisplay.innerText}`;
+    parts = upperScreenDisplay.innerText.slice(1).split(/([\/\+\-\*])/); // Split the string excluding the first character
+    parts[0] = "-" + parts[0]; // Add the initial '-' back to the first number
+  } else {
+    upperScreenDisplay.innerText += ` ${screenDisplay.innerText}`;
+    parts = upperScreenDisplay.innerText.split(/([\/\+\-\*])/); // Split the string normally if it does not start with '-'
+  }
   for (i = 0; i < parts.length; i++) {
     if (["/", "+", "-", "*"].includes(parts[i])) {
       operator += parts[i];
@@ -129,6 +141,11 @@ function solveMath() {
       let dividand = parts[0].split("/"); //to split the current innertext
       upperScreenDisplay.innerText = `${parts[1]} / ${dividand[1]} =`;
       screenDisplay.innerText = parts[1] / Number(dividand[1]);
+      calcHistory.push({
+        math: upperScreenDisplay.innerText,
+        answer: screenDisplay.innerText,
+      });
+      displayHistory();
     }
   } else if (operator === "-") {
     if (firstTime === true) {
@@ -170,6 +187,12 @@ function solveMath() {
       screenDisplay.innerText = +parts[1] + Number(dividand[1]);
     }
   }
+  calcHistory.push({
+    math: upperScreenDisplay.innerText,
+    answer: screenDisplay.innerText,
+  });
+  displayHistory();
+  console.log(calcHistory);
 }
 
 function clearScreen() {
@@ -179,6 +202,7 @@ function clearScreen() {
 }
 
 function percentDiv() {
+  specialFuncs = true;
   repition = 0;
   canPerformOperation = true;
   if (
@@ -192,28 +216,54 @@ function percentDiv() {
     upperScreenDisplay.innerText = screenDisplay.innerText / 100;
     screenDisplay.innerText = screenDisplay.innerText / 100;
   }
+  calcHistory.push({
+    math: upperScreenDisplay.innerText,
+    answer: screenDisplay.innerText,
+  });
+  displayHistory();
 }
 
 function squareRoot() {
+  specialFuncs = true;
   reset = true;
   upperScreenDisplay.innerText = `√(${screenDisplay.innerText})`;
   screenDisplay.innerText = Math.sqrt(+screenDisplay.innerText);
+  calcHistory.push({
+    math: upperScreenDisplay.innerText,
+    answer: screenDisplay.innerText,
+  });
+  displayHistory();
 }
 
 function square() {
+  specialFuncs = true;
   reset = true;
   upperScreenDisplay.innerText = `sqr(${screenDisplay.innerText})`;
   screenDisplay.innerText = Number(screenDisplay.innerText) ** 2;
+  calcHistory.push({
+    math: upperScreenDisplay.innerText,
+    answer: screenDisplay.innerText,
+  });
+  displayHistory();
 }
 
 function oneOverX() {
+  specialFuncs = true;
   reset = true;
-  upperScreenDisplay.innerText = `1/(${screenDisplay.innerText})`;
   if (screenDisplay.innerText !== "0") {
-    screenDisplay.innerText = 1 / screenDisplay.innerText;
+    if (screenDisplay.innerText !== "Cannot divide by zero") {
+      upperScreenDisplay.innerText = `1/(${screenDisplay.innerText})`;
+      screenDisplay.innerText = 1 / screenDisplay.innerText;
+      return;
+    }
   } else {
     screenDisplay.innerText = "Cannot divide by zero";
   }
+  calcHistory.push({
+    math: upperScreenDisplay.innerText,
+    answer: screenDisplay.innerText,
+  });
+  displayHistory();
 }
 
 function negate() {
@@ -236,6 +286,11 @@ function backSpaceAll() {
 }
 
 function backSpace() {
+  if (doneCalc === true) {
+    upperScreenDisplay.innerText = "";
+    doneCalc = false;
+    return;
+  }
   let delArray = screenDisplay.innerText.split("");
   delArray.pop();
   if (delArray.length > 0) {
@@ -244,3 +299,32 @@ function backSpace() {
     screenDisplay.innerText = "0";
   }
 }
+
+function displayHistory() {
+  historyList.innerHTML = "";
+  calcHistory.forEach((solution) => {
+    historyList.innerHTML += `<div class="solution-list"><p class="top">${solution.math}</p><p class="bottom">${solution.answer}</p></div>`;
+  });
+  deleteList.style.display = "block";
+}
+
+function deleteHistory() {
+  historyList.innerHTML = "There's no history yet.";
+  historyList.style.color = "white";
+}
+
+// function showHistory() {
+//   historyEmpty.style.display = "block";
+//   historyDefaultText.style.display = "block";
+//   historyList.style.display = "block";
+//   memoryDefaultText.style.display = "none";
+//   memoryEmpty.style.display = "none";
+// }
+
+// function showMemory() {
+//   historyEmpty.style.display = "none";
+//   historyDefaultText.style.display = "none";
+//   historyList.style.display = "none";
+//   memoryDefaultText.style.display = "block";
+//   memoryEmpty.style.display = "block";
+// }
